@@ -39,7 +39,10 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	
+	@RequestMapping(value={"", "/","/home", "/welcome"})
+	public String welcome() {
+		return "Welcome to the ECommerce Rest API's";
+	}
 	
 
 	@GetMapping("/users")

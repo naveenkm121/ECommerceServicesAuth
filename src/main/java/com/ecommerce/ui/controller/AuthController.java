@@ -1,6 +1,7 @@
 package com.ecommerce.ui.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,10 @@ public class AuthController {
 	@Autowired GsonHelper gsonHelper;
 	
 	
-	
+	@RequestMapping(value={"", "/","/home", "/welcome"})
+	public String welcome() {
+		return "Welcome to the ECommerce Rest API's";
+	}
 	
 	 @PostMapping("/login")
 	 public String login (@RequestBody LoginReq loginReq) {
