@@ -11,7 +11,7 @@
 	<groupId>com.ecommerce</groupId>
 	<artifactId>ECommerceServiceAuth</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>ECommerceServiceAuth</name>
 	<properties>
 		<java.version>1.8</java.version>
