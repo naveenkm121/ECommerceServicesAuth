@@ -9,6 +9,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.ui.utils.CommonUtility;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -21,12 +22,6 @@ public class ECommerceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ECommerceApplication.class, args);
 		System.out.println("E Commerce Project started git");
-		try {
-			initializeFirebase();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	@RequestMapping(value={"", "/","/home", "/welcome"})
@@ -35,10 +30,4 @@ public class ECommerceApplication {
 	}
 	
 	
-    private static void initializeFirebase() throws IOException {
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("serviceAccountKey.json").getInputStream()))
-                .build();
-        FirebaseApp.initializeApp(options);
-    }
 }

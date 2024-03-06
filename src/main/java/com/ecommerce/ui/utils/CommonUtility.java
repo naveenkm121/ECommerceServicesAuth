@@ -1,7 +1,12 @@
 package com.ecommerce.ui.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.core.io.ClassPathResource;
 
 import com.ecommerce.ui.dto.BaseApiResModel;
 
@@ -21,6 +26,11 @@ public class CommonUtility {
 		Matcher matcher = pattern.matcher(mobileNumber);
 		return matcher.matches();
 	}
-	
+	public static String readJsonFromFile(String fileName) throws IOException {
+		File resource = new ClassPathResource(fileName).getFile();
+		String resString = new String(Files.readAllBytes(resource.toPath()));
+		
+		return resString;
+	}
 
 }
