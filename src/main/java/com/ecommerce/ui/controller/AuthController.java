@@ -12,6 +12,8 @@ import com.ecommerce.ui.dto.BaseApiResModel;
 import com.ecommerce.ui.dto.LoginBaseApiResModel;
 import com.ecommerce.ui.dto.LoginReq;
 import com.ecommerce.ui.entity.Users;
+import com.ecommerce.ui.fcm.FcmNotificationService;
+import com.ecommerce.ui.fcm.PushNotificationRequest;
 import com.ecommerce.ui.security.JwtTokenUtil;
 import com.ecommerce.ui.service.UserService;
 import com.ecommerce.ui.utils.GsonHelper;
@@ -23,6 +25,7 @@ public class AuthController {
 	@Autowired UserService userService;
 	@Autowired private JwtTokenUtil jwtTokenUtil;
 	@Autowired GsonHelper gsonHelper;
+	@Autowired FcmNotificationService fcmNotificationService;
 	
 	
 	@RequestMapping(value={"", "/","/home", "/welcome"})
@@ -44,5 +47,11 @@ public class AuthController {
 	 @PostMapping("/signup")
 	 public String createUsers(@RequestBody Users newUser) {
 	    return userService.createUser(newUser);
+	 }
+	 
+	 @PostMapping("/fcm")
+	 public String sendFCMNotification (@RequestBody PushNotificationRequest pushNotificationRequest) {
+		 
+		 return fcmNotificationService.sendNotification(pushNotificationRequest);
 	 }
 }
