@@ -66,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/v1/products/subsubcategory/{subSubCatId}").permitAll()
 				.antMatchers("/v1/categories").permitAll()
 				.antMatchers("/v1/auth/**").permitAll()  
+				.antMatchers("/fcm/notification/**").permitAll()  
 				.antMatchers("/v1/users/{id}").permitAll()
 				.antMatchers("/").permitAll()
 				/*.antMatchers("/v1/**").permitAll() */
