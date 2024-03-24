@@ -301,7 +301,7 @@ public class UserService {
 
 	public BaseApiResModel addUserAddress(Address address) {
 		BaseApiResModel apiResponse = new BaseApiResModel();
-		if (address.getStreet() != null && !address.getStreet().equals("")) {
+		if (address.getAddress1() != null && !address.getAddress1().equals("")) {
 			boolean isValidMobile = CommonUtility.isValidMobileNumber(address.getMobile());
 			if (isValidMobile) {
 				addressRepository.save(address);
@@ -354,8 +354,12 @@ public class UserService {
 				existingAddress.setName(newAddress.getName());
 			if (newAddress.getMobile() != null && !newAddress.getMobile().isEmpty())
 				existingAddress.setMobile(newAddress.getMobile());
-			if (newAddress.getStreet() != null && !newAddress.getStreet().isEmpty())
-				existingAddress.setStreet(newAddress.getStreet());
+			if (newAddress.getAddress1() != null && !newAddress.getAddress1().isEmpty())
+				existingAddress.setAddress1(newAddress.getAddress1());
+			if (newAddress.getAddress2() != null && !newAddress.getAddress2().isEmpty())
+				existingAddress.setAddress2(newAddress.getAddress2());
+			if (newAddress.getLandmark() != null && !newAddress.getLandmark().isEmpty())
+				existingAddress.setLandmark(newAddress.getLandmark());
 			if (newAddress.getCity() != null && !newAddress.getCity().isEmpty())
 				existingAddress.setCity(newAddress.getCity());
 			if (newAddress.getPincode() != null && !newAddress.getPincode().isEmpty())

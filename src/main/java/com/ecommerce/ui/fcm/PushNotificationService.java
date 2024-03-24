@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PushNotificationService {
 
-    @Value("#{${app.notifications.defaults}}")
-    private Map<String, String> defaults;
+   // @Value("#{${app.notifications.defaults}}")
+  //  private Map<String, String> defaults;
 
     private Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
     private FCMService fcmService;
@@ -43,6 +43,9 @@ public class PushNotificationService {
 
     public void sendPushNotificationToToken(PushNotificationRequest request) {
         try {
+        	//System.out.println("Notif Value "+request);
+        	logger.info("Notif Value "+request);
+        	 logger.debug("Notif Value "+request);
             fcmService.sendMessageToToken(request);
         } catch (Exception e) {
             logger.error(e.getMessage());
