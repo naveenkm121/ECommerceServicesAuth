@@ -2,6 +2,7 @@ package com.ecommerce.ui.service;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ import com.ecommerce.ui.dto.CartDTO;
 import com.ecommerce.ui.dto.CartItem;
 import com.ecommerce.ui.dto.LoginBaseApiResModel;
 import com.ecommerce.ui.dto.LoginReq;
+import com.ecommerce.ui.dto.PincodeDTO;
+import com.ecommerce.ui.dto.PincodeItem;
 import com.ecommerce.ui.dto.UserDTO;
 import com.ecommerce.ui.dto.WishlistDTO;
 import com.ecommerce.ui.entity.Address;
@@ -366,8 +369,8 @@ public class UserService {
 				existingAddress.setPincode(newAddress.getPincode());
 			if (newAddress.getState() != null && !newAddress.getState().isEmpty())
 				existingAddress.setState(newAddress.getState());
-			if (newAddress.getCountry() != null && !newAddress.getCountry().isEmpty())
-				existingAddress.setCountry(newAddress.getCountry());
+			if (newAddress.getLocality() != null && !newAddress.getLocality().isEmpty())
+				existingAddress.setLocality(newAddress.getLocality());
 			if (newAddress.getIsDefault() == 1)
 				existingAddress.setIsDefault(newAddress.getIsDefault());
 
@@ -489,6 +492,35 @@ public class UserService {
 			apiResponse.setMessage("Cart  does't not exits");
 		}
 
+		return apiResponse;
+	}
+	
+	public BaseApiResModel getPincodeDetail(String pincode) {
+		BaseApiResModel apiResponse = new BaseApiResModel();
+		
+		if(!pincode.isEmpty() && pincode.length()==6) {
+			List<PincodeItem> pincodeItems = addressRepository.getPincodeDetails(pincode);
+			if (pincodeItems.size()>0) {
+				PincodeDTO pincodeDTO= new PincodeDTO();
+				pincodeDTO.setPincode(pincode);
+				pincodeDTO.setDistrict(pincodeItems.get(0).getDistrict());
+				pincodeDTO.setState(pincodeItems.get(0).getState());
+				for (PincodeItem pincodeItem : pincodeItems) {
+					pincodeDTO.locality.add(pincodeItem.getLocality());
+				}
+				apiResponse.setData(pincodeDTO);
+				apiResponse.setStatus(AppConstants.SUCCESS_STATUS);
+				apiResponse.setMessage(AppConstants.SUCCESS_MSG);
+			} else {
+				apiResponse.setData(null);
+				apiResponse.setStatus(AppConstants.FAILURE_STATUS);
+				apiResponse.setMessage("Pincode does not exits");
+			}
+		}else {
+			apiResponse.setData(null);
+			apiResponse.setStatus(AppConstants.FAILURE_STATUS);
+			apiResponse.setMessage("Pincode length should be 6");
+		}
 		return apiResponse;
 	}
 

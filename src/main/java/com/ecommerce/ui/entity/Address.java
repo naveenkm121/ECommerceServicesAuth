@@ -46,9 +46,11 @@ public class Address {
 	@Column(name = "landmark")
 	private String landmark;
 	
+	@Column(name = "locality")
+	private String locality;
+	
 	@Column(name = "city")
 	private String city;
-	
 	
 	@Column(name = "pincode")
 	private String pincode;
@@ -57,8 +59,6 @@ public class Address {
 	@Column(name = "state")
 	private String state;
 	
-	@Column(name = "country")
-	private String country;
 	
 	@Column(name = "mobile")
 	private String mobile;
@@ -116,14 +116,6 @@ public class Address {
 		this.state = state;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
 	public int getIsDefault() {
 		return isDefault;
 	}
@@ -162,6 +154,14 @@ public class Address {
 
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+
+	public String getLocality() {
+		return locality;
+	}
+
+	public void setLocality(String locality) {
+		this.locality = locality;
 	}
 
 	

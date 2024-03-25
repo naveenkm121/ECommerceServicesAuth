@@ -209,4 +209,18 @@ public class UserController {
 		} 
 		return new ResponseEntity<BaseApiResModel>(baseApiResponse, HttpStatus.OK);
 	}
+	
+	@GetMapping("/pincode/{pincode}")
+	public ResponseEntity<BaseApiResModel> getPincodeDetail(@PathVariable String pincode) {
+		BaseApiResModel baseApiResponse=null;
+		Users users=userService.getUserDetailFromToken();
+		if(users!=null){
+			baseApiResponse= userService.getPincodeDetail(pincode);
+		}else{
+			baseApiResponse.setMessage("Unauthorise User");
+		} 
+		return new ResponseEntity<BaseApiResModel>(baseApiResponse, HttpStatus.OK);
+	}
+	
+	
 }	
