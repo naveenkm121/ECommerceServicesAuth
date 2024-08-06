@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.ui.constant.AppConstants;
 import com.ecommerce.ui.dto.BaseApiResModel;
@@ -307,6 +308,12 @@ public class UserService {
 		if (address.getAddress1() != null && !address.getAddress1().equals("")) {
 			boolean isValidMobile = CommonUtility.isValidMobileNumber(address.getMobile());
 			if (isValidMobile) {
+				
+				if (address.getIsDefault() == 1) {
+					address.setIsDefault(address.getIsDefault());
+					updateDefaultAddress(address.getUserId(),address.getId());
+				}
+				
 				addressRepository.save(address);
 				apiResponse.setData(address);
 				apiResponse.setStatus(AppConstants.SUCCESS_STATUS);
@@ -371,8 +378,10 @@ public class UserService {
 				existingAddress.setState(newAddress.getState());
 			if (newAddress.getLocality() != null && !newAddress.getLocality().isEmpty())
 				existingAddress.setLocality(newAddress.getLocality());
-			if (newAddress.getIsDefault() == 1)
+			if (newAddress.getIsDefault() == 1) {
 				existingAddress.setIsDefault(newAddress.getIsDefault());
+				updateDefaultAddress(newAddress.getUserId(),id);
+			}
 
 			newAddress = addressRepository.saveAndFlush(existingAddress);
 			apiResponse.setData(newAddress);
@@ -386,6 +395,13 @@ public class UserService {
 
 		return apiResponse;
 	}
+	
+	  @Transactional
+	    public void updateDefaultAddress(Long userId,int addressId) {
+		  //System.out.println("UserId== "+userId+" :: AddressId="+addressId);
+	        addressRepository.setDefaultAddress(userId,addressId);
+	        addressRepository.unsetOtherDefaultAddresses(userId,addressId);
+	    }
 
 	public BaseApiResModel getCartItemByUserId(long userId) {
 		BaseApiResModel apiResponse = new BaseApiResModel();

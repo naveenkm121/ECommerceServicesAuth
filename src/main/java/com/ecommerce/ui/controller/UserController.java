@@ -154,6 +154,7 @@ public class UserController {
 		Users users=userService.getUserDetailFromToken();
 		BaseApiResModel baseApiResponse=null;
 		if(users!=null){
+			address.setUserId(users.getId());
 			baseApiResponse= userService.updateAddressById(address,id);
 		}else{
 			baseApiResponse.setMessage("Unauthorise User");
