@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ecommerce.ui.constant.AppConstants;
+import com.ecommerce.ui.utils.ProductFilterEnum;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,7 +29,7 @@ public class ExpermimentController {
 	
 	
 		@Autowired
-		private  FCMTokenService fcmTokenService;
+		private  ExperimentService experimentService;
 
 	   //@Value("${file.upload-dir}")
 	    private String uploadDirPath="F:/UploadPicture/";
@@ -35,7 +39,7 @@ public class ExpermimentController {
 	    
 	    @PostMapping("/fcmToken")
 	    public ResponseEntity<FCMToken> saveOrUpdateToken(@RequestBody FCMToken fcmToken) {
-	        FCMToken savedToken = fcmTokenService.saveOrUpdateToken(fcmToken);
+	        FCMToken savedToken = experimentService.saveOrUpdateToken(fcmToken);
 	        return new ResponseEntity<>(savedToken, HttpStatus.OK);
 	    }
 
@@ -48,7 +52,7 @@ public class ExpermimentController {
 	     */
 	    @GetMapping("/fcmToken")
 	    public ResponseEntity<FCMToken> getToken(@RequestParam Long userId, @RequestParam String deviceId) {
-	        Optional<FCMToken> token = fcmTokenService.findByUserIdAndDeviceId(userId, deviceId);
+	        Optional<FCMToken> token = experimentService.findByUserIdAndDeviceId(userId, deviceId);
 	        return token.map(fcmToken -> new ResponseEntity<>(fcmToken, HttpStatus.OK))
 	                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	    }
@@ -61,11 +65,29 @@ public class ExpermimentController {
 	     */
 	    @DeleteMapping("/fcmToken/{id}")
 	    public ResponseEntity<Void> deleteToken(@PathVariable Long id) {
-	        fcmTokenService.deleteToken(id);
+	        experimentService.deleteToken(id);
 	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
 	    
 	    
+	    @PostMapping("/contacts")
+	    public ResponseEntity<String> saveContacts (@RequestBody ContactReq contactReq) {
+	    	experimentService.saveContacts(contactReq);
+	        return ResponseEntity.ok("Contacts JSON saved successfully!");
+	    }
+	    
+	    @GetMapping("/contacts/{id}")
+	    public ResponseEntity<ContactReq> getContactsById(@PathVariable int id) {
+	    	ContactReq contactReq = experimentService.getContactById(id);
+
+	        // Check if the contact exists
+	        if (contactReq!=null) {
+	            return ResponseEntity.ok(contactReq);
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	        }
+	    }
+
 	    
 
 	    @GetMapping("/capturePicture")

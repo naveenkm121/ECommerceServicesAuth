@@ -1,21 +1,26 @@
 package com.ecommerce.ui.experiment;
 
 import com.ecommerce.ui.experiment.FCMToken;
+import com.ecommerce.ui.utils.GsonHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class FCMTokenService {
+public class ExperimentService {
 
     private final FCMTokenRepository fcmTokenRepository;
 
     @Autowired
-    public FCMTokenService(FCMTokenRepository fcmTokenRepository) {
+    public ExperimentService(FCMTokenRepository fcmTokenRepository) {
         this.fcmTokenRepository = fcmTokenRepository;
     }
+    
+    @Autowired
+    private ContactRepository contactRepository;
 
     /**
      * Saves a new FCM token or updates an existing one.
@@ -56,4 +61,25 @@ public class FCMTokenService {
     public void deleteToken(Long id) {
         fcmTokenRepository.deleteById(id);
     }
+    
+    
+    public void saveContacts(ContactReq contactReq) {
+        ContactEntity contactEntity = new ContactEntity();
+        contactEntity.setDeviceId(contactReq.getDeviceId());
+        contactEntity.setContactData(GsonHelper.toJson(contactReq.getContacts())); // Save as JSON string (Text)
+        contactRepository.save(contactEntity);
+    }
+    
+    public ContactReq getContactById(long id) {
+    	ContactReq contactReq= null;
+    	Optional<ContactEntity> contacOptional=  contactRepository.findById(id);
+     	  if (contacOptional.isPresent()) {
+     		 ContactEntity entity= contacOptional.get();
+     		 contactReq= new ContactReq();
+     		 contactReq.setDeviceId(entity.getDeviceId());
+     		 contactReq.setContacts(GsonHelper.getList(entity.getContactData(), ContactData.class));
+     		 
+     	  } 
+     	 return contactReq;
+    }	
 }
