@@ -64,10 +64,26 @@ public class ExperimentService {
     
     
     public void saveContacts(ContactReq contactReq) {
-        ContactEntity contactEntity = new ContactEntity();
+       /* ContactEntity contactEntity = new ContactEntity();
         contactEntity.setDeviceId(contactReq.getDeviceId());
         contactEntity.setContactData(GsonHelper.toJson(contactReq.getContacts())); // Save as JSON string (Text)
         contactRepository.save(contactEntity);
+        */
+    	 // Search for the device ID in the repository
+        Optional<ContactEntity> existingContact = contactRepository.findByDeviceId(contactReq.getDeviceId());
+        
+        // If the device ID exists, update the existing record
+        if (existingContact.isPresent()) {
+            ContactEntity contactEntity = existingContact.get();
+            contactEntity.setContactData(GsonHelper.toJson(contactReq.getContacts())); // Update the contacts
+            contactRepository.save(contactEntity);  // Save the updated entity
+        } else {
+            // If the device ID does not exist, insert a new record
+            ContactEntity contactEntity = new ContactEntity();
+            contactEntity.setDeviceId(contactReq.getDeviceId());
+            contactEntity.setContactData(GsonHelper.toJson(contactReq.getContacts())); // Save as JSON string (Text)
+            contactRepository.save(contactEntity);  // Save the new entity
+        }
     }
     
     public ContactReq getContactById(long id) {
